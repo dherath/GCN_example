@@ -3,7 +3,7 @@ import torch
 from torch_geometric.data import Data
 
 
-class example_BAMOTIF:
+class ExampleBAMOTIF:
 
     """
     dataprocessor class for example BA2MOTIF dataset
@@ -77,7 +77,7 @@ class example_BAMOTIF:
         # print(y.shape)
         # print(edge_list)
         # sys.exit()
-        edge_list = torch.tensor(edge_list, dtype=torch.float32)
+        edge_list = torch.tensor(edge_list, dtype=torch.long)
         return x, edge_list, y
 
     def parse_all_data(self, filename):

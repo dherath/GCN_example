@@ -79,12 +79,14 @@ class GCN(GNNBasic):
         #else:
         #    self.readout = GlobalMeanPool()
 
-        self.ffn = nn.Sequential(*(
-                [nn.Linear(dim_hidden[2], dim_hidden[2])] +
-                [nn.ReLU(), nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[2], num_classes)]
-        ))
+        # self.ffn = nn.Sequential(*(
+        #         [nn.Linear(dim_hidden[-1], dim_hidden[-1])] +
+        #         [nn.ReLU(), nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[-1], num_classes)]
+        # ))
 
-        self.dropout = nn.Dropout(p=dropout_level)
+        self.ffn = nn.Sequential(*(
+            [nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[-1], num_classes)]
+        ))
         return
 
     def forward(self, *args, **kwargs) -> torch.Tensor:
