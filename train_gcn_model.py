@@ -1,12 +1,71 @@
-from dig.xgraph.dataset import SynGraphDataset
+# from dig.xgraph.dataset import SynGraphDataset
 # from dig.xgraph.models import *
+import sys
 import torch
-from torch_geometric.data import DataLoader
-from torch_geometric.data import Data, InMemoryDataset, download_url, extract_zip
-import os.path as osp
+import pickle
+# from torch_geometric.data import DataLoader
+# from torch_geometric.data import Data, InMemoryDataset, download_url, extract_zip
+# import os.path as osp
 import os
+from scipy.sparse import coo_matrix
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+
+def load_pickle(filename):
+    """
+    loads pickle data
+    """
+    data = None
+    with open(filename, 'rb') as fp:
+        print(filename)
+        data = pickle.load(fp)
+    return data
+
+
+def process_data(filename):
+    """
+    processes the dataset, pytorch gemoteric needs data in coo-format
+    the tensor dataloader will need = node_feat, edge_indices, edge_weights (optional), class_labels
+    """
+
+    # the example dataset has [adjacency-matrix, featues, labels] stored in seperate lists
+    data = load_pickle(filename)
+    adjs = data[0]  # list of adjacency matricex
+    feats = data[1]
+    labels = data[2]
+
+    # will loop through all data and convert it to tensor format
+    for adj, feat, label in zip(adjs, feats, labels):
+        row, col, edge_attr = adj.t().coo()
+        return
+    
+    
+    
+    return
+
+
+def main():
+    """
+    trains a GCN model
+    """
+    
+    filename = "./datasets/BA_2Motifs.pkl"
+    data = load_pickle(filename)
+
+    # preprocessing the data
+    # print(data[0].shape)
+    # labels =
+    adj = data[0][0]
+    coo = coo_matrix(adj)
+    # edge_index = torch.utils.from_scipy_sparse_matrix(coo)
+    # print(edge_index)
+    print(coo.shape)
+    return
+
+main()
+sys.exit()
+
 
 # 1. getting the dataset
 
