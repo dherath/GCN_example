@@ -57,7 +57,7 @@ def main():
     # the parameters for setting it are milestones and gamma (defults to None)
     # current version has a single learning rate throughout all epochs
     train_params = {
-        'num_epochs': 300,
+        'num_epochs': 20,
         'num_early_stop': 10,
         'milestones': None,
         'gamma': None

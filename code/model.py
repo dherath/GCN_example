@@ -39,8 +39,14 @@ class GCN(GNNBasic):
     """
 
     def __init__(self, dim_node, dim_hidden, num_classes, dropout_level):
+        """
+        dim_node (int): the #features per node
+        dim_hidden (list): the list of hidden sizes after each convolution step
+        num_classes (int): the number of classes
+        dropout_level (float): the dropout probability
+        """
         super().__init__()
-        num_layer = len(dim_hidden)  # 3
+        num_layer = len(dim_hidden)
 
         self.conv1 = gnn.GCNConv(dim_node, dim_hidden[0])
 
@@ -52,14 +58,6 @@ class GCN(GNNBasic):
             layers.append(gnn.GCNConv(dim_hidden[i], dim_hidden[i + 1]))
         self.convs = nn.ModuleList(layers)
         
-        #self.convs = nn.ModuleList(
-        #    [
-        #        gnn.GCNConv(dim_hidden[0], dim_hidden[1]),
-        #        gnn.GCNConv(dim_hidden[1], dim_hidden[2])
-        #        # for _ in range(num_layer - 1)
-        #     ]
-        #)
-
         # can change the activation functions as required
         # in case the data contains negative numbers then Relu()
         # might not be ~good
@@ -73,12 +71,8 @@ class GCN(GNNBasic):
         )
 
         self.readout = GlobalMeanPool()
-        
-        # if model_level == 'node':
-        #    self.readout = IdenticalPool()
-        #else:
-        #    self.readout = GlobalMeanPool()
 
+        # can also use an additional Linear layer before predictions as follows:
         # self.ffn = nn.Sequential(*(
         #         [nn.Linear(dim_hidden[-1], dim_hidden[-1])] +
         #         [nn.ReLU(), nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[-1], num_classes)]
@@ -111,6 +105,7 @@ class GCN(GNNBasic):
     def get_emb(self, *args, **kwargs) -> torch.Tensor:
         """
         Auxilary function if node embeddings are required seperately
+        works similar to the forward pass above
         """
         x, edge_index, batch = self.arguments_read(*args, **kwargs)
         post_conv = self.relu1(self.conv1(x, edge_index))
@@ -119,12 +114,12 @@ class GCN(GNNBasic):
         return post_conv
 
 
-"""
-The following are Pooling layers for the readout functions
-Currently I used to methods
-1. MeanPool: Takes the mean for node embeddings per node
-2. Identity: Does not change the node emebddgins
-"""
+# ----------------------------
+# The following are Pooling layers for the readout functions
+# Currently I used to methods
+# 1. MeanPool: Takes the mean for node embeddings per node
+# 2. Identity: Does not change the node emebddgins
+# ----------------------------
 
 
 class GNNPool(nn.Module):
