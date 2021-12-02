@@ -38,7 +38,7 @@ class GCN(GNNBasic):
     The model is for graph classification tasks
     """
 
-    def __init__(self, dim_node, dim_hidden, num_classes):
+    def __init__(self, dim_node, dim_hidden, num_classes, dropout_level):
         super().__init__()
         num_layer = len(dim_hidden)  # 3
 
@@ -48,8 +48,8 @@ class GCN(GNNBasic):
         # if other types of conv layers are needed this is where to changes them
         # if edge_weights are availabe, must change it here (must refer pytorch-geometric documentation)
         layers = []
-        for i in range(len(num_layer) - 1):
-            layers.append(gnn.GCNConv(dim_hidden[i]), dim_hidden[i + 1])
+        for i in range(num_layer - 1):
+            layers.append(gnn.GCNConv(dim_hidden[i], dim_hidden[i + 1]))
         self.convs = nn.ModuleList(layers)
         
         #self.convs = nn.ModuleList(
@@ -81,10 +81,10 @@ class GCN(GNNBasic):
 
         self.ffn = nn.Sequential(*(
                 [nn.Linear(dim_hidden[2], dim_hidden[2])] +
-                [nn.ReLU(), nn.Dropout(), nn.Linear(dim_hidden[2], num_classes)]
+                [nn.ReLU(), nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[2], num_classes)]
         ))
 
-        self.dropout = nn.Dropout(p=0.1)
+        self.dropout = nn.Dropout(p=dropout_level)
         return
 
     def forward(self, *args, **kwargs) -> torch.Tensor:
