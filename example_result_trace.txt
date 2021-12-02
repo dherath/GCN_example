@@ -1,0 +1,37 @@
++ started GCN + BA2Motif example...
++ data BA2Motif loaded
++ classifier model:
+ GCN(
+  (conv1): GCNConv(10, 64)
+  (convs): ModuleList(
+    (0): GCNConv(64, 32)
+    (1): GCNConv(32, 16)
+  )
+  (relu1): ReLU()
+  (relus): ModuleList(
+    (0): ReLU()
+    (1): ReLU()
+  )
+  (readout): GlobalMeanPool()
+  (ffn): Sequential(
+    (0): Dropout(p=0.01, inplace=False)
+    (1): Linear(in_features=16, out_features=2, bias=True)
+  )
+)
++ trainer class created...
+
+Epoch:0, Training_loss:0.7049, Eval_loss:0.6968, Eval_acc:0.4500
+saving best model version...
+Epoch:1, Training_loss:0.6930, Eval_loss:0.6885, Eval_acc:0.5500
+saving best model version...
+Epoch:2, Training_loss:0.6956, Eval_loss:0.6955, Eval_acc:0.4500
+Epoch:3, Training_loss:0.6961, Eval_loss:0.7006, Eval_acc:0.4500
+Epoch:4, Training_loss:0.6937, Eval_loss:0.6959, Eval_acc:0.4500
+Epoch:5, Training_loss:0.6925, Eval_loss:0.6916, Eval_acc:0.5500
+Epoch:6, Training_loss:0.6923, Eval_loss:0.6885, Eval_acc:0.5500
+Epoch:7, Training_loss:0.7032, Eval_loss:0.6892, Eval_acc:0.5500
+Epoch:8, Training_loss:0.6931, Eval_loss:0.6967, Eval_acc:0.4500
+Epoch:9, Training_loss:0.6985, Eval_loss:0.7021, Eval_acc:0.4500
+Epoch:10, Training_loss:0.6930, Eval_loss:0.7009, Eval_acc:0.4500
+Epoch:11, Training_loss:0.6928, Eval_loss:0.6987, Eval_acc:0.4500
+Test loss: 0.6957, test acc 0.5000
