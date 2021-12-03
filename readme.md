@@ -2,7 +2,7 @@
 
 To run the code
 
-`$ python train_model.py
+` python train_model.py
 `
 
 The model architecture in this example:
@@ -28,7 +28,11 @@ GCN(
 ```
 The model architecture can be changed in **train_model.py**
 
-+ The current code uses [BA2Motif](https://arxiv.org/pdf/2011.04573.pdf) graph dataset
-+ Note: the model in this example has not been tuned
-+ The **requirements.txt** file can be used to creata a anaconda virtual gpu-environment
++ code/
+  - dataproccessor_bamotif.py: has the methods to convert the dataset into pytorch-geometric acceptable format
+  - model.py: has the definition of the GCN model and the pooling layers
+  - trainer.py: has the trainer class, will train/eval/test based on dataset and save model state
 
++ The current code uses [BA2Motif](https://arxiv.org/pdf/2011.04573.pdf) graph dataset
+
++ Note: the model in this example has not been tuned

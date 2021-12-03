@@ -39,12 +39,12 @@ class ExampleBAMOTIF:
     def parse_single_graph(self, adj, feat, label):
         """
         parses a single graph into pytorch-geometric format
-        the libarary reuqires graphs parsed as an edge_list
+        this requires graphs parsed as an edge_list
         ----------------
         Args
         adj (list): 25x25 adjacency matrix
         feat (list): [25, #feats] feature matrix
-        label (int): 0/1 for class label
+        label (list): one hot vector for class label
         ----------------
         Returns
         x (torch.tensor): the features
@@ -53,8 +53,11 @@ class ExampleBAMOTIF:
         """
         x = torch.tensor(feat, dtype=torch.float32)
 
+        # the label has to be either 0 or 1, so the one-hot-vector
+        # is converted to its numeric format
         label_id = 0 if label[0] == 1 else 1
         y = torch.tensor(label_id, dtype=torch.long)
+
         edge_list, u, v = [], [], []
         
         # loop throught the adj. matrix and fill in edges as
@@ -100,7 +103,7 @@ class ExampleBAMOTIF:
             x, edge_list, y = self.parse_single_graph(adj, feat, label)
             
             # if there are edge weights
-            # then Data(x=x, edge_index=edge_list, edge-weight=wdge_weight, y=y)
+            # then Data(x=x, edge_index=edge_list, edge_weight=edge_weight, y=y)
             dataset.append(Data(x=x, edge_index=edge_list, y=y))
 
         return dataset

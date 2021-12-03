@@ -48,10 +48,10 @@ class GCN(GNNBasic):
         super().__init__()
         num_layer = len(dim_hidden)
 
-        self.conv1 = gnn.GCNConv(dim_node, dim_hidden[0])
+        self.conv1 = gnn.GCNConv(dim_node, dim_hidden[0])  # the first convolution layer
 
-        # append the conv layers
-        # if other types of conv layers are needed this is where to changes them
+        # append the rest of the conv. layers
+        # if other types of GNN layers are needed this and the above self.conv1 is where to changes them
         # if edge_weights are availabe, must change it here (must refer pytorch-geometric documentation)
         layers = []
         for i in range(num_layer - 1):
@@ -59,28 +59,25 @@ class GCN(GNNBasic):
         self.convs = nn.ModuleList(layers)
         
         # can change the activation functions as required
-        # in case the data contains negative numbers then Relu()
-        # might not be ~good
+        # in case the data/features contains negative numbers then Relu()
+        # might not be ~good?
         
         self.relu1 = nn.ReLU()
         self.relus = nn.ModuleList(
-            [
-                nn.ReLU()
-                for _ in range(num_layer - 1)
-            ]
+            [nn.ReLU() for _ in range(num_layer - 1)]
         )
 
         self.readout = GlobalMeanPool()
+
+        self.ffn = nn.Sequential(*(
+            [nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[-1], num_classes)]
+        ))
 
         # can also use an additional Linear layer before predictions as follows:
         # self.ffn = nn.Sequential(*(
         #         [nn.Linear(dim_hidden[-1], dim_hidden[-1])] +
         #         [nn.ReLU(), nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[-1], num_classes)]
         # ))
-
-        self.ffn = nn.Sequential(*(
-            [nn.Dropout(p=dropout_level), nn.Linear(dim_hidden[-1], num_classes)]
-        ))
         return
 
     def forward(self, *args, **kwargs) -> torch.Tensor:
@@ -105,7 +102,7 @@ class GCN(GNNBasic):
     def get_emb(self, *args, **kwargs) -> torch.Tensor:
         """
         Auxilary function if node embeddings are required seperately
-        works similar to the forward pass above
+        works similar to the forward pass above, but without readout
         """
         x, edge_index, batch = self.arguments_read(*args, **kwargs)
         post_conv = self.relu1(self.conv1(x, edge_index))
@@ -118,7 +115,7 @@ class GCN(GNNBasic):
 # The following are Pooling layers for the readout functions
 # Currently I used two methods
 # 1. MeanPool: Takes the mean for node embeddings per node
-# 2. Identity: Does not change the node emebddgins
+# 2. Identity: Does not change the node embedings
 # ----------------------------
 
 
@@ -129,6 +126,10 @@ class GNNPool(nn.Module):
 
 class GlobalMeanPool(GNNPool):
 
+    """
+    Mean pooling
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -137,6 +138,10 @@ class GlobalMeanPool(GNNPool):
 
 
 class IdenticalPool(GNNPool):
+
+    """
+    Identity pooling (no change to embeddings)
+    """
 
     def __init__(self):
         super().__init__()

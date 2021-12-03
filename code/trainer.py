@@ -61,8 +61,8 @@ def get_dataloader(dataset, batch_size, data_split_ratio=None, seed=100):
 class TrainModel(object):
 
     """
-    classs for trainging GCN model
-    current code requires loading complete dataset to memory
+    classs for trainging GCN/GNN model
+    current code requires loading complete dataset to memory (default option for many models)
     if this is inneficient (on RAM), must change code to load only a mini-batch from file
     however this would mean the training time is longer
     """
@@ -144,7 +144,7 @@ class TrainModel(object):
         return loss, preds
 
     # -------------------------
-    # main funcitons
+    # main functions
     # -------------------------
     
     def eval(self):
@@ -152,7 +152,7 @@ class TrainModel(object):
         runs the _eval_batch on eval-dataset
         """
         self.model.to(self.device)
-        self.model.eval()
+        self.model.eval()  # stops gradient computation
 
         with torch.no_grad():
             losses, accs = [], []
@@ -169,7 +169,7 @@ class TrainModel(object):
 
     def test(self):
         """
-        runs _test_batch() on test-dataset
+        runs _eval_batch() on test-dataset
         """
         state_dict = torch.load(os.path.join(self.save_dir, f'{self.save_name}_best.pth'))['net']
         self.model.load_state_dict(state_dict)
@@ -231,8 +231,7 @@ class TrainModel(object):
             self.model.train()
             losses = []
 
-            # does mini-batch gradient descent
-            # for each epoch, loop through all mini-batches
+            # for each epoch, loop through all batches
             for idx, batch in enumerate(self.loader['train']):
                 batch = batch.to(self.device)
                 loss = self._train_batch(batch, batch.y)
@@ -264,7 +263,7 @@ class TrainModel(object):
 
     def save_model(self, is_best=False, recording=None):
         """
-        saves model to file
+        saves model to file, defaults to save best version based on eval.
         """
         self.model.to('cpu')
         state = {'net': self.model.state_dict()}
