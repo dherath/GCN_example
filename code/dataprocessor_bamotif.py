@@ -51,14 +51,13 @@ class ExampleBAMOTIF:
         edge_list (torch.tensor): the edges list [[i,...], [j,...]] for i->j edge
         y (torch.tensor): the labels
         """
-        # print(feat)
         x = torch.tensor(feat, dtype=torch.float32)
-        # print(label)
+
         label_id = 0 if label[0] == 1 else 1
         y = torch.tensor(label_id, dtype=torch.long)  # label always has to be long, for higher precision
         edge_list, u, v = [], [], []
         
-        # loop throught he adj. matrix and fill in edges as
+        # loop throught the adj. matrix and fill in edges as
         # for an i->j edge, [[i,...], [j,...]]
 
         # since graphs are small for this dataset (25 nodes)
@@ -73,10 +72,6 @@ class ExampleBAMOTIF:
 
         edge_list.append(u)
         edge_list.append(v)
-        # print(x.shape)
-        # print(y.shape)
-        # print(edge_list)
-        # sys.exit()
         edge_list = torch.tensor(edge_list, dtype=torch.long)
         return x, edge_list, y
 
