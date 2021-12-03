@@ -86,7 +86,6 @@ class TrainModel(object):
         self.save_name = save_name
         check_dir(self.save_dir)
 
-        # if self.graph_classification:
         dataloader_params = kwargs.get('dataloader_params')
         self.loader = get_dataloader(dataset, **dataloader_params)
 
@@ -127,7 +126,7 @@ class TrainModel(object):
 
     def _eval_batch(self, data, labels, **kwargs):
         """
-        similar to _trainn_batch above, but has no optimizer step
+        similar to _train_batch above, but has no optimizer step
         ---------------
         Args
         data (torch.Data): the data mini-batch
