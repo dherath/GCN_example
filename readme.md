@@ -28,7 +28,7 @@ GCN(
 ```
 The model architecture can be changed in **train_model.py**
 
-+ The current code uses [BA2Motif](https://openreview.net/pdf?id=tt04glo-VrT) graph dataset
++ The current code uses [BA2Motif](https://arxiv.org/pdf/2011.04573.pdf) graph dataset
 + Note: the model in this example has not been tuned
 + The **requirements.txt** file can be used to creata a anaconda virtual gpu-environment
 
