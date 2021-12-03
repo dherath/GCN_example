@@ -54,7 +54,7 @@ class ExampleBAMOTIF:
         x = torch.tensor(feat, dtype=torch.float32)
 
         label_id = 0 if label[0] == 1 else 1
-        y = torch.tensor(label_id, dtype=torch.long)  # label always has to be long, for higher precision
+        y = torch.tensor(label_id, dtype=torch.long)
         edge_list, u, v = [], [], []
         
         # loop throught the adj. matrix and fill in edges as
