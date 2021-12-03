@@ -116,7 +116,7 @@ class GCN(GNNBasic):
 
 # ----------------------------
 # The following are Pooling layers for the readout functions
-# Currently I used to methods
+# Currently I used two methods
 # 1. MeanPool: Takes the mean for node embeddings per node
 # 2. Identity: Does not change the node emebddgins
 # ----------------------------
