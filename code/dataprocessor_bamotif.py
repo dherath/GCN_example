@@ -8,7 +8,7 @@ class ExampleBAMOTIF:
     """
     dataprocessor class for example BA2MOTIF dataset
     information of dataset can be found in PGExplainer paper
-    : https://openreview.net/pdf?id=tt04glo-VrT
+    : https://arxiv.org/pdf/2011.04573.pdf
     
     > there are 1000 graphs with each graph having 25 nodes
     > there are no edge features, the graphs have two classes 0,1
