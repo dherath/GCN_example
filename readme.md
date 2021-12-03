@@ -32,5 +32,3 @@ The model architecture can be changed in **train_model.py**
 + Note: the model in this example has not been tuned
 + The **requirements.txt** file can be used to creata a anaconda virtual gpu-environment
 
-#### Folder structure
-
