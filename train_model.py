@@ -9,6 +9,10 @@ def main():
 
     """
     Note: I have not tuned the model to its best hyper-parameter combination for this dataset
+    code/
+        - dataproccessor_bamotif.py: has the methods to convert the BA2Motif dataset into pytorch-geometric acceptable format
+        - model.py: has the definition of the GCN model and the pooling layers
+        - trainer.py: has the trainer class, will train/eval/test based on dataset and save model state
     """
     
     print('+ started GCN + BA2Motif example...')
@@ -18,6 +22,8 @@ def main():
     """
     1. dataprocesssor class, will need to modify this
     for other data (can use this as skeleton)
+    pytorch-geometric requires graphs in edge_list format
+    : more information is provided in the ExampleBAMOTIF class code
     """
 
     dataprocessor = ExampleBAMOTIF()
@@ -57,8 +63,24 @@ def main():
         'seed': 100
     }
 
+    path = './'  # will use this to generate path to save models
+
     """
-    3.2. the trainer params
+    3.2. create the trainer class
+    """
+
+    trainer = TrainModel(
+        model=classifier,
+        dataset=dataset,
+        device=device,
+        save_dir=os.path.join(path, 'models'),
+        save_name='GCN_Ba2motif_example',
+        dataloader_params=dataloader_params
+    )
+    print('+ trainer class created...\n')
+    
+    """
+    3.3. set the trainer params
 
     > Notes
     can set model to stop early if required (checks for current_eval_loss <= best_eval_loss to stop)
@@ -76,7 +98,7 @@ def main():
     }
 
     """
-    3.3. set params for optimizer
+    3.4. set params for optimizer
 
     > Notes
     sets the starting learning rate and weight decay
@@ -86,23 +108,7 @@ def main():
         'lr': 0.01,
         'weight_decay': 5e-8
     }
-
-    path = './'  # will use this to generate path to save models
-
-    """
-    3.4. create the trainer class
-    """
-
-    trainer = TrainModel(
-        model=classifier,
-        dataset=dataset,
-        device=device,
-        save_dir=os.path.join(path, 'models'),
-        save_name='GCN_Ba2motif_example',
-        dataloader_params=dataloader_params
-    )
-    print('+ trainer class created...\n')
-
+    
     """
     3.5. run training iterations
     """
